@@ -35,11 +35,23 @@ sub list ($) {
 
 =head1 SYNOPSIS
 
-  my $arrayref = [ qw(foo bar baz) ];
-  print join '-', list $arrayref;  # foo-bar-baz
+  use Ref::List qw(list);
+
+  my $data = { 
+  	countries => [
+		{ name => 'Bulgaria', language = 'Bulgarian' },
+		{ name => 'Germany', language = 'German' },
+	],
+  };
+
+  print $_->{name} for list $data->{countries};
+
+=head1 DESCRIPTION
+
+This module exports a single function, C<list>, which dereferences the arrayref or hashref passed to it as an argument. C<list $argument> is basically a synonym for C<@{$argument}>, but is less awkward when C<$argument> is a longer expression part of a nested data structure.
 
 =func list (HASHREF|ARRAYREF)
 
-Given a hash or array reference, dereference it and return its contents as a list.
+Given a hash or array reference, dereference it and return its contents as a list. If the argument is C<undef>, returns C<undef>.
 
 

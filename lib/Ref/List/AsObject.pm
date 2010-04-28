@@ -16,14 +16,24 @@ sub list ($)
 {
 	my $ref = shift;
 	
-	if ($ref->isa('Data::AsObject::ARRAY')) 
+	if ( ref($ref) eq "Data::AsObject::Array" ) 
 	{
-		return dao @$ref;
+		my @array;
+		while ( my $value = shift @$ref ) 
+		{
+			$Data::AsObject::__check_type->($_) ? push @array, dao $value : push @array, $value;
+		}
+		return @array;
 	}
-	elsif ($ref->isa('Data::AsObject::HASH')) 
+	elsif ( ref($ref) eq "Data::AsObject::Hash" )
 	{
-		return;
-	} 
+		my %hash;
+		while ( my ($key, $value) = each %$ref )
+		{
+			$Data::AsObject::__check_type->($_) ? $hash{$key} = dao $value : $hash{$key} = $value;
+		}
+		return %hash;
+	}
 	else 
 	{
 		return Ref::List::list($ref);
@@ -34,8 +44,21 @@ sub list ($)
 
 =head1 SYNOPSIS
 
-  my $arrayref = [ qw(foo bar baz) ];
-  print join '-', list $arrayref;  # foo-bar-baz
+  use Data::AsObject qw(dao);
+  use Ref::List::AsObject qw(list);
+
+  my $data = dao { 
+  	countries => [
+		{ name => 'Bulgaria', language = 'Bulgarian' },
+		{ name => 'Germany', language = 'German' },
+	],
+  };
+
+  print $_->name for list $data->countries;
+
+=head1 DESCRIPTION
+
+This module provides similar functionality to L<Ref::List>, but if the argument to C<list> is a C<Data::AsObject::Hash> or C<Data::AsObject::Array>, the items in the resulting array will autmatically be blessed into the respective L<Data::AsObject> class (where possible) to preserve the object-oriented access syntax.
 
 =func list (HASHREF|ARRAYREF)
 
