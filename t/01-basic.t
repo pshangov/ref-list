@@ -1,8 +1,10 @@
 #!perl -T
 
+use strict;
+use warnings;
+
 use Test::More;
 use Test::Exception;
-
 use Ref::List qw(list);
 
 # dereferncing undef

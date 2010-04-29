@@ -19,9 +19,9 @@ sub list ($)
 	if ( ref($ref) eq "Data::AsObject::Array" ) 
 	{
 		my @array;
-		while ( my $value = shift @$ref ) 
+		foreach  my $value (@$ref) 
 		{
-			$Data::AsObject::__check_type->($_) ? push @array, dao $value : push @array, $value;
+			$Data::AsObject::__check_type->($value) ? push @array, dao $value : push @array, $value;
 		}
 		return @array;
 	}
@@ -30,7 +30,7 @@ sub list ($)
 		my %hash;
 		while ( my ($key, $value) = each %$ref )
 		{
-			$Data::AsObject::__check_type->($_) ? $hash{$key} = dao $value : $hash{$key} = $value;
+			$Data::AsObject::__check_type->($value) ? $hash{$key} = dao $value : $hash{$key} = $value;
 		}
 		return %hash;
 	}
