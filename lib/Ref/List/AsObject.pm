@@ -16,7 +16,7 @@ sub list ($)
 {
 	my $ref = shift;
 	
-	if ( ref($ref) eq "Data::AsObject::Array" ) 
+	if ( ref($ref) =~ /^Data::AsObject::Array::(Strict|Loose|Silent)/ ) 
 	{
 		my @array;
 		foreach  my $value (@$ref) 
@@ -25,7 +25,7 @@ sub list ($)
 		}
 		return @array;
 	}
-	elsif ( ref($ref) eq "Data::AsObject::Hash" )
+	elsif ( ref($ref) =~ /^Data::AsObject::Hash::(Strict|Loose|Silent)/ )
 	{
 		my %hash;
 		while ( my ($key, $value) = each %$ref )
