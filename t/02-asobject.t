@@ -10,6 +10,7 @@ use Test::Exception;
 use Ref::List::AsObject qw(list);
 
 SKIP: {
+	
 	eval { require Data::AsObject };
 	skip "Data::AsObject not installed" if $@;
 	
@@ -32,13 +33,14 @@ SKIP: {
 	my $subref = sub { return };
 	dies_ok { list $subref } 'Ref::List::AsObject dereferencing an invalid argument';
 	
+	my $dao = Data::AsObject->_build_dao('Strict');
 	# test compatibility with Data::AsObject
-	my $data = Data::AsObject::dao {
+	my $data = $dao->({
 		spain => [ 
 			{ name => 'spanish', numbers => ["uno", "dos", "tres", "cuatro"] },
 			{ name => 'catalan', numbers => ["un", "dos", "tres", "quatre"] },
 		],
-	};
+	});
 
 	# dereferencing Data::AsObject::Array
 	my @spanish_catalan = map { $_->name } list $data->spain;
